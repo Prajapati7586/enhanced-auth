@@ -1,7 +1,10 @@
 const User = require("../models/user");
 const bcrypt = require("bcryptjs");
 const { ADMIN } = require("../utils/constant");
-const { generateToken, userObjectWithoutPassKey } = require("../utils/generatejwt");
+const {
+  generateToken,
+  userObjectWithoutPassKey,
+} = require("../utils/generatejwt");
 
 // Login
 exports.createAdmin = async (req, res) => {
@@ -37,6 +40,6 @@ exports.createAdmin = async (req, res) => {
       .status(201)
       .json({ ...userObjectWithoutPassKey(newUser.dataValues), token });
   } catch (error) {
-     res.status(500).json({ message: error.message });
+    res.status(500).json({ message: error.message });
   }
 };
