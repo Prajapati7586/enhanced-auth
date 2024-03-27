@@ -1,5 +1,5 @@
 const passport = require('passport');
-const GoogleStrategy = require('passport-google-oauth20').Strategy;
+// const GoogleStrategy = require('passport-google-oauth20').Strategy;
 const LocalStrategy = require('passport-local').Strategy;
 const User = require('../models/user');
 const dotenv = require('dotenv');
@@ -23,34 +23,34 @@ passport.use(
   })
 );
 
-// Google strategy
-passport.use(
-    new GoogleStrategy(
-      {
-        clientID: process.env.GOOGLE_ID,
-        clientSecret: process.env.GOOGLE_SECRET,
-        callbackURL: '/auth/google/callback',
-      },
-      async (accessToken, refreshToken, profile, done) => {
-        try {
-          const existingUser = await User.findOne({ googleId: profile.id });
+// // Google strategy
+// passport.use(
+//     new GoogleStrategy(
+//       {
+//         clientID: process.env.GOOGLE_ID,
+//         clientSecret: process.env.GOOGLE_SECRET,
+//         callbackURL: '/auth/google/callback',
+//       },
+//       async (accessToken, refreshToken, profile, done) => {
+//         try {
+//           const existingUser = await User.findOne({ googleId: profile.id });
   
-          if (existingUser) return done(null, existingUser);
+//           if (existingUser) return done(null, existingUser);
   
-          const newUser = await new User({
-            googleId: profile.id,
-            name: profile.displayName,
-            email: profile.emails[0].value,
-            photo: profile.photos[0].value,
-          }).save();
+//           const newUser = await new User({
+//             googleId: profile.id,
+//             name: profile.displayName,
+//             email: profile.emails[0].value,
+//             photo: profile.photos[0].value,
+//           }).save();
   
-          done(null, newUser);
-        } catch (err) {
-          done(err, false);
-        }
-      }
-    )
-  );
+//           done(null, newUser);
+//         } catch (err) {
+//           done(err, false);
+//         }
+//       }
+//     )
+//   );
 
   // Serialize and deserialize user
 passport.serializeUser((user, done) => {
