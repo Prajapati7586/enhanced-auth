@@ -29,15 +29,16 @@ exports.register = async (req, res) => {
     // Generate a JWT token
     const token = generateToken(
       newUser.dataValues.id,
-      newUser.dataValues.email
+      newUser.dataValues.email,
+      newUser.dataValues.role
     );
 
     // Send the token as a response
-    res
+    return res
       .status(201)
       .json({ ...userObjectWithoutPassKey(newUser.dataValues), token });
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    return res.status(500).json({ message: error.message });
   }
 };
 
@@ -56,12 +57,12 @@ exports.login = async (req, res) => {
       return res.status(401).json({ message: "Invalid password" });
 
     // Generate a JWT token
-    const token = generateToken(userData.id, userData.email);
+    const token = generateToken(userData.id, userData.email, userData.role);
 
     // Send the token as a response
-    res.status(200).json({ ...userObjectWithoutPassKey(userData), token });
+    return res.status(200).json({ ...userObjectWithoutPassKey(userData), token });
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    return res.status(500).json({ message: error.message });
   }
 };
 

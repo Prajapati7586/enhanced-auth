@@ -1,6 +1,7 @@
 const express = require('express');
 const userController = require('../controllers/userController');
 const auth = require('../middleware/auth');
+const admin = require('../middleware/admin');
 
 const router = express.Router();
 
@@ -14,7 +15,7 @@ router.put('/myprofile', auth, userController.editProfile);
 router.put('/profile/privacy', auth, userController.setPrivacy);
 
 // List public profiles
-router.get('/profiles', userController.listPublicProfiles);
+router.get('/profiles',admin, userController.listPublicProfiles);
 
 
 module.exports = router;

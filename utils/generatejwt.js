@@ -3,10 +3,12 @@ const dotenv = require('dotenv');
 
 dotenv.config();
 
-function generateToken(userId, email) {
+function generateToken(userId, email, role) {
+
   const payload = {
     sub: userId,
     email:email,
+    role:role,
     iat: Date.now(),
   };
 

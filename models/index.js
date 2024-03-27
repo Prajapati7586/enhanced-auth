@@ -1,6 +1,7 @@
 
 const Sequelize = require('sequelize');
 const sequelize = require('../config/db');
+const { ADMIN, NORMAL } = require('../utils/constant');
 
 const User = sequelize.define('User', {
   id: {
@@ -21,8 +22,8 @@ const User = sequelize.define('User', {
     allowNull: false,
   },
   role:{
-    type: Sequelize.ENUM('NORMAL', 'ADMIN'), // Only allow 'NORMAL' or 'ADMIN' as role values
-    defaultValue: 'NORMAL', // Set the default role to 'NORMAL'
+    type: Sequelize.ENUM(ADMIN, NORMAL), // Only allow 'NORMAL' or 'ADMIN' as role values
+    defaultValue: NORMAL, // Set the default role to 'NORMAL'
     allowNull: false,
   },
 });

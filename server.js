@@ -4,6 +4,8 @@ const cors = require('cors');
 const passport = require('passport');
 const authRoutes = require('./routes/authRoutes');
 const userRoutes = require('./routes/userRoutes');
+const adminRoutes = require('./routes/adminRoutes');
+
 const sequelize = require('./config/db');
 require('./config/passport');
 
@@ -15,6 +17,7 @@ app.use(passport.initialize());
 
 app.use('/api/v1/auth', authRoutes);
 app.use('/api/v1/users', userRoutes);
+app.use('/api/v1/admin', adminRoutes);
 
 const PORT = process.env.SERVER_PORT || 8000;
 

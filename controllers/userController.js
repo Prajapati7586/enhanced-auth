@@ -1,5 +1,6 @@
 const User = require("../models/user");
 const bcrypt = require("bcryptjs");
+const { ADMIN } = require("../utils/constant");
 
 // Get user profile
 exports.getProfile = async (req, res) => {
@@ -11,9 +12,9 @@ exports.getProfile = async (req, res) => {
     if (!user) {
       return res.status(404).json({ error: "User not found." });
     }
-    res.json(user);
+    return res.json(user);
   } catch (error) {
-    res.status(500).json({ error: "Server error." });
+    return res.status(500).json({ error: "Server error." });
   }
 };
 
@@ -49,9 +50,9 @@ exports.editProfile = async (req, res) => {
 
     await user.save();
 
-    res.json(user);
+    return res.json(user);
   } catch (error) {
-    res.status(500).json({ message: "Something went wrong." });
+    return res.status(500).json({ message: "Something went wrong." });
   }
 };
 
@@ -60,7 +61,7 @@ exports.setPrivacy = async (req, res) => {
   try {
     const userId = req.user.id;
     const newIsPrivateValue = req.body.isPrivate;
-    if (newIsPrivateValue===undefined) {
+    if (newIsPrivateValue === undefined) {
       return res.status(404).json({ error: "invalid data." });
     }
     const user = await User.findByPk(userId);
@@ -72,21 +73,29 @@ exports.setPrivacy = async (req, res) => {
     user.isPrivate = newIsPrivateValue;
     await user.save();
 
-    res.json(user);
+    return res.json(user);
   } catch (error) {
-    res.status(500).json({ error: "Server error." });
+    return res.status(500).json({ error: "Server error." });
   }
 };
 
 // List public profiles
 exports.listPublicProfiles = async (req, res) => {
   try {
+    if (req?.user?.role === ADMIN) {
+      const users = await User.findAll({
+        attributes: { exclude: ["password", "phone"] },
+      });
+      return res.status(200).json(users);
+    }
+
     const users = await User.findAll({
       where: { isPrivate: false },
       attributes: { exclude: ["password", "phone"] },
     });
-    res.status(200).json(users);
+
+    return res.status(200).json(users);
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    return res.status(500).json({ message: error.message });
   }
 };
